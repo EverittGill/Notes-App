@@ -1,0 +1,1 @@
+// index.js reroutes all incoming requests to different js files in the routes folder containing routes
