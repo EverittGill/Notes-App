@@ -56,31 +56,32 @@ app.get('/api/notes', (req, res) => res.json(termData));
 
 // POST /api/notes should receive a new note to save on the request body, add it to the db.json file, and then return the new note to the client.
 app.post('/api/notes', (req, res) => {
+// log that it was received
+console.info(`${req.method} request to add a review`)
+
   // Read the existing notes from the db.json file
-  fs.readFile('db.json', 'utf8', (err, data) => {
+  fs.readFile('./db.json', 'utf8', (err, data) => {
     if (err) {
-      return res.status(500).send({ error: 'Error reading the db.json file' });
+      console.error(err);
+      return res.status(500).send({ error: 'could not read the notes'})
     }
+      // Convert string into JSON object
+      const existingNotes = JSON.parse(data);
 
-    let notes;
-    try {
-      notes = JSON.parse(data);
-    } catch (error) {
-      return res.status(500).send({ error: 'Error parsing the db.json file' });
-    }
-
-    // Add the new note to the existing notes
-    const newNote = req.body;
-    notes.push(newNote);
+      const newNote = req.body
+      // Add the new note to the existing notes
+    existingNotes.push(newNote);
 
     // Write the updated notes to the db.json file
-    fs.writeFile('db.json', JSON.stringify(notes), (err) => {
+    fs.writeFile('./db.json', JSON.stringify(existingNotes), (err) => {
       if (err) {
-        return res.status(500).send({ error: 'Error writing to the db.json file' });
+        console.error(err);
+         return res.status(500).send({ error: 'could not save the note due to error'});
       }
-
-      // Return the new note to the client
-      return res.status(201).send(newNote);
+          // Return the new note to the client
+      return res.status(201).send(newNote);})
+      
+      
     });
-  });
-});
+    });
+
