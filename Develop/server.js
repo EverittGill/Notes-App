@@ -16,8 +16,8 @@
 const express = require('express');
 const fs = require('fs')
 const path = require('path')
-const { clog } = require('./middleware/clog')
-const api = require('./routes.index.js')
+// const { clog } = require('./middleware/clog')
+// const api = require('../routes.index.js')
 
 const PORT = process.env.PORT || 3001;
 
@@ -85,3 +85,6 @@ console.info(`${req.method} request to add a review`)
     });
     });
 
+    app.listen(PORT, () =>
+    console.log(`App listening at http://localhost:${PORT} 🚀`)
+  );
